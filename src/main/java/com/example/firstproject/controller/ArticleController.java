@@ -75,6 +75,21 @@ public class ArticleController {
         //뷰 페이지 설정
         return "articles/edit";
     }
+    @PostMapping("/articles/update")
+    public String update(ArticleForm form){
+        log.info(form.toString());
+        // 1.Dto를 Entity로 변환
+        Article articleEntity = form.toEntity();
+        // 2. Entity를 DB로 저장한다.
+        // 2-1 DB의 기존데이터를 가져온다.
+         Article target = articleRepository.findById(articleEntity.getId()).orElse(null);
+        // 2-2 기존 데이터가 있다면 값을 갱신한다.
+        if(target != null){
+            articleRepository.save(articleEntity);  //entity가 DB로 갱신된다.
+        }
+        // 3. 수정 결과 페이지를 리다이렉트 해준다.
+        return "redirect:/articles/"+articleEntity.getId();
+    }
 
     }
 
