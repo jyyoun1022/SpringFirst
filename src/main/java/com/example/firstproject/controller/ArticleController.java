@@ -40,8 +40,7 @@ public class ArticleController {
 
         log.info(saved.toString());
 
-
-        return "";
+        return "redirect:/articles/" +saved.getId();
     }
     @GetMapping("/articles/{id}")
     public String show(@PathVariable Long id, Model model){
@@ -64,5 +63,18 @@ public class ArticleController {
         return "articles/index";
 
     }
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id,Model model){
 
-}
+        //수정할 데이터를 보여주어야 한다.
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+
+        // 모델에 데이터를 등록
+        model.addAttribute("article",articleEntity);
+
+        //뷰 페이지 설정
+        return "articles/edit";
+    }
+
+    }
+
